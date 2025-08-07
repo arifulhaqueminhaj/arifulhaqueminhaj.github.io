@@ -44,9 +44,85 @@
             cursor: pointer;
         }
         .profile-container:hover .upload-overlay { opacity: 1; }
+        
+        /* Star Effect Styles */
+        .star-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        .star {
+            position: absolute;
+            color: #ffd700;
+            font-size: 20px;
+            opacity: 0;
+            animation: starBlink 2s ease-out forwards;
+        }
+        
+        @keyframes starBlink {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+                filter: drop-shadow(0 0 0px #ffd700);
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1.2) rotate(72deg);
+                filter: drop-shadow(0 0 10px #ffd700);
+            }
+            40% {
+                opacity: 0.8;
+                transform: scale(0.8) rotate(144deg);
+                filter: drop-shadow(0 0 15px #ffd700);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.5) rotate(216deg);
+                filter: drop-shadow(0 0 20px #ffd700);
+            }
+            80% {
+                opacity: 0.6;
+                transform: scale(1) rotate(288deg);
+                filter: drop-shadow(0 0 25px #ffd700);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) rotate(360deg);
+                filter: drop-shadow(0 0 30px #ffd700);
+            }
+        }
+        
+        .glow-pulse {
+            animation: glowPulse 1.5s ease-in-out;
+        }
+        
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+            }
+            25% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6);
+            }
+            75% {
+                box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Star Effect Container -->
+    <div class="star-container" id="star-container"></div>
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm shadow-sm z-50">
         <div class="max-w-6xl mx-auto px-4 py-4">
@@ -315,11 +391,12 @@
         <div class="max-w-6xl mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Projects</h2>
             <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+                <a href="https://github.com/arifulhaqueminhaj/Car-rent-Website" target="_blank" class="block bg-white rounded-lg shadow-lg overflow-hidden card-hover hover:shadow-xl transition-all duration-300 cursor-pointer">
                     <div class="p-8">
                         <div class="flex items-center mb-4">
                             <i class="fas fa-car text-3xl text-blue-600 mr-4"></i>
                             <h3 class="text-xl font-semibold text-gray-800">Car Rental System</h3>
+                            <i class="fab fa-github text-2xl text-gray-400 ml-auto hover:text-blue-600 transition-colors"></i>
                         </div>
                         <p class="text-gray-600 mb-6">A comprehensive car rental management system built with modern web technologies, featuring user-friendly interface and efficient booking management.</p>
                         <div class="flex items-center justify-between">
@@ -327,12 +404,12 @@
                                 <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Web Development</span>
                                 <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">System Design</span>
                             </div>
-                            <a href="https://github.com/arifulhaque12/Car-Rental-System.git" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                <i class="fab fa-github text-xl"></i>
-                            </a>
+                            <div class="text-blue-600 font-medium text-sm">
+                                View on GitHub →
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
                     <div class="p-8">
@@ -396,6 +473,9 @@
                     <div class="mt-12">
                         <h4 class="text-xl font-semibold mb-6">Social Links</h4>
                         <div class="flex space-x-4">
+                            <a href="https://www.facebook.com/ariful.minhaj.13" target="_blank" class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors">
+                                <i class="fab fa-facebook-f text-xl font-bold"></i>
+                            </a>
                             <a href="https://www.linkedin.com/arifulhaqueminhaj" target="_blank" class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors">
                                 <i class="fab fa-linkedin text-xl"></i>
                             </a>
@@ -578,6 +658,71 @@
                 heroName.classList.remove('name-glow');
             }, 1000);
         }
+
+        // Star and glow effect function
+        function createStarEffect(event) {
+            const starContainer = document.getElementById('star-container');
+            const numberOfStars = 8;
+            
+            // Get click position
+            const rect = event.target.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Create stars around the clicked element
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.innerHTML = '★';
+                star.className = 'star';
+                
+                // Position stars in a circle around the click point
+                const angle = (i * 360) / numberOfStars;
+                const radius = 50 + Math.random() * 30;
+                const x = centerX + Math.cos(angle * Math.PI / 180) * radius;
+                const y = centerY + Math.sin(angle * Math.PI / 180) * radius;
+                
+                star.style.left = x + 'px';
+                star.style.top = y + 'px';
+                star.style.fontSize = (15 + Math.random() * 10) + 'px';
+                
+                starContainer.appendChild(star);
+                
+                // Remove star after animation
+                setTimeout(() => {
+                    if (star.parentNode) {
+                        star.parentNode.removeChild(star);
+                    }
+                }, 2000);
+            }
+            
+            // Add glow effect to the clicked element
+            event.target.classList.add('glow-pulse');
+            setTimeout(() => {
+                event.target.classList.remove('glow-pulse');
+            }, 1500);
+        }
+
+        // Add star effect to all buttons and clickable elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all buttons, links, and clickable elements
+            const clickableElements = document.querySelectorAll('button, a, .cursor-pointer, [onclick]');
+            
+            clickableElements.forEach(element => {
+                element.addEventListener('click', createStarEffect);
+            });
+            
+            // Also add to navigation links
+            const navLinks = document.querySelectorAll('nav a, #mobile-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', createStarEffect);
+            });
+            
+            // Add to social media icons
+            const socialLinks = document.querySelectorAll('.flex.space-x-4 a');
+            socialLinks.forEach(link => {
+                link.addEventListener('click', createStarEffect);
+            });
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b920fa62837055',t:'MTc1NDU5NDQwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b945a8b20525b1',t:'MTc1NDU5NTkwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
