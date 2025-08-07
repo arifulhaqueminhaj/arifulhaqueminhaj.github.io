@@ -247,7 +247,7 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600">September 2025 - Present</span>
-                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold">CGPA: 3.97/4.00</span>
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold">CGPA: 3.50/4.00</span>
                     </div>
                 </div>
 
